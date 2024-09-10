@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userRoute = void 0;
+const express_1 = require("express");
+const user_controller_1 = require("./user.controller");
+const user_controller_2 = require("./user.controller");
+const user_controller_3 = require("./user.controller");
+const user_controller_4 = require("./user.controller");
+const user_controller_5 = require("./user.controller");
+const UserRoutes = (0, express_1.Router)();
+exports.userRoute = UserRoutes;
+UserRoutes.get("/find-user/:id", user_controller_1.findUserByIdHandler);
+UserRoutes.get("/get-users", user_controller_2.getAllUserByIdHandler);
+UserRoutes.post("/create-user", user_controller_3.createUserHandler);
+UserRoutes.patch("/update-user/:id", user_controller_4.updateUserHandler);
+UserRoutes.delete("/delete-user/:id", user_controller_5.deleteUserHandler);
