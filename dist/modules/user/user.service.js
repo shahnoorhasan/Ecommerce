@@ -12,13 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = getUserById;
+exports.getAnyUserById = getAnyUserById;
 exports.getAllUserById = getAllUserById;
-exports.createUser = createUser;
-exports.updateUser = updateUser;
-exports.deleteUser = deleteUser;
+exports.updateAnyUser = updateAnyUser;
+exports.deleteAnyUser = deleteAnyUser;
 const db_util_1 = __importDefault(require("../../utils/db.util"));
-function getUserById(id) {
+function getAnyUserById(id) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield db_util_1.default.user.findUnique({ where: { id } });
         if (!user)
@@ -32,34 +31,64 @@ function getAllUserById() {
         return users;
     });
 }
-function createUser(data) {
+// export async function createAnyUser(data: Prisma.UserUncheckedCreateInput) {
+//   try {
+//     const enc_password = await bcrypt.hash(data.password, 10);
+//     const user = await prisma.user.create({
+//       data: {
+//         fullname: data.fullname,
+//         email: data.email,
+//         password: enc_password,
+//         phoneNumber: data.phoneNumber,
+//         country: data.country,
+//         city: data.city,
+//       },
+//     });
+//     const token = jwt.sign(
+//       { user_id: data.id, user_email: data.email },
+//       "shhhh",
+//       {
+//         expiresIn: "1h",
+//       }
+//     );
+//     return { user, token };
+//   } catch (error: any) {
+//     throw new Error(`The error is ${error}`);
+//   }
+// }
+// export async function AnyUserSignIn(
+//   email: string,
+//   current_password: string
+// ): Promise<{ user: User; token: string } | undefined> {
+//   try {
+//     const user = await prisma.user.findUnique({ where: { email } });
+//     if (!user) throw new Error(`This email is not registered `);
+//     const passwordMatch = await bcrypt.compare(current_password, user.password);
+//     if (!passwordMatch) throw new Error(`Invalid Password`);
+//     const token = jwt.sign(
+//       {
+//         user_id: user.id,
+//         email: user.email,
+//       },
+//       "shhhh",
+//       { expiresIn: "1h" }
+//     );
+//     return { user, token };
+//   } catch (error) {
+//     console.log(error);
+//     return undefined;
+//   }
+// }
+function updateAnyUser(data, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const user = yield db_util_1.default.user.create({
-                data: {
-                    username: data.username,
-                    email: data.email,
-                    phoneNumber: data.phoneNumber,
-                    country: data.country,
-                    city: data.city,
-                },
-            });
-            return user;
-        }
-        catch (error) {
-            throw new Error(`The error is ${error}`);
-        }
-    });
-}
-function updateUser(data, id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const existingUser = yield getUserById(id);
+        const existingUser = yield getAnyUserById(id);
         if (!existingUser)
             throw new Error(`User does not exist`);
         yield db_util_1.default.user.update({
             data: {
-                username: data.username || existingUser.username,
+                fullName: data.fullName || existingUser.fullName,
                 email: data.email || existingUser.email,
+                password: data.password || existingUser.password,
                 phoneNumber: data.phoneNumber || existingUser.phoneNumber,
                 country: data.country || existingUser.country,
                 city: data.city || existingUser.city,
@@ -68,9 +97,9 @@ function updateUser(data, id) {
         });
     });
 }
-function deleteUser(id) {
+function deleteAnyUser(id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const existingUser = yield getUserById(id);
+        const existingUser = yield getAnyUserById(id);
         if (!existingUser)
             throw new Error(`User does not exist`);
         yield db_util_1.default.user.delete({ where: { id } });

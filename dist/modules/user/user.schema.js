@@ -1,14 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserSchema = exports.createUserSchema = void 0;
+exports.UserSignInSchema = exports.updateUserSchema = exports.createUserSchema = void 0;
 const zod_1 = require("zod");
-const usernameRegex = /^[a-zA-Z][a-zA-Z0-9]{2,19}$/; // starts with a letter can contain numbers
+const fullnameRegex = /^[A-Z][a-zA-Z]*(?: [A-Z][a-zA-Z]*)*$/;
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]{8,20}$/; // must include letters and digits and special characters
 const phonenumberRegex = /^(?:\+92|03)\d{9}$/;
 const counrtyRegex = /^[a-zA-Z]+$/;
 const cityRegex = /^[a-zA-Z]+$/;
 exports.createUserSchema = zod_1.z.object({
-    username: zod_1.z.string().regex(usernameRegex, "Invalid Username"),
-    email: zod_1.z.string().email(),
+    fullName: zod_1.z
+        .string()
+        .min(3, {
+        message: "Full name too short",
+    })
+        .max(30, {
+        message: "Full name too long, cant be more than 30 letters",
+    })
+        .regex(fullnameRegex, "Can Only contain Letters"),
+    email: zod_1.z.string().endsWith("@gmail.com", {
+        message: "only gmail domains are valid",
+    }),
+    password: zod_1.z
+        .string()
+        .regex(passwordRegex, "Password must inculde letters, digits and special characters"),
     phoneNumber: zod_1.z.string().regex(phonenumberRegex, "Invalid Phone Number"),
     country: zod_1.z
         .string()
@@ -16,8 +30,25 @@ exports.createUserSchema = zod_1.z.object({
     city: zod_1.z.string().regex(cityRegex, "City name can only contain aplhabets"),
 });
 exports.updateUserSchema = zod_1.z.object({
-    username: zod_1.z.string().regex(usernameRegex, "Invalid Username").optional(),
-    email: zod_1.z.string().email({ message: "Invalid email address" }).optional(),
+    fullName: zod_1.z
+        .string()
+        .min(3, {
+        message: "Full name too short",
+    })
+        .max(30, {
+        message: "Full name too long, cant be more than 30 letters",
+    })
+        .regex(fullnameRegex, "Can Only contain Letters")
+        .optional(),
+    email: zod_1.z
+        .string()
+        .endsWith("@gmail.com", {
+        message: "only gmail domains are valid",
+    })
+        .optional(),
+    password: zod_1.z
+        .string()
+        .regex(passwordRegex, "Password must inculde letters, digits and special characters"),
     phoneNumber: zod_1.z
         .string()
         .regex(phonenumberRegex, "Invalid Phone Number")
@@ -30,4 +61,12 @@ exports.updateUserSchema = zod_1.z.object({
         .string()
         .regex(cityRegex, "City name can only contain aplhabets")
         .optional(),
+});
+exports.UserSignInSchema = zod_1.z.object({
+    email: zod_1.z.string().endsWith("@gmail.com", {
+        message: "only gmail domains are valid",
+    }),
+    password: zod_1.z
+        .string()
+        .regex(passwordRegex, "Password must inculde letters, digits and special characters"),
 });

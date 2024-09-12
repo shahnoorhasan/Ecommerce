@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getUserById } from "../user/user.service";
+import { getAnyUserById } from "../user/user.service";
 // import { getProductByName } from "./purchasing.service";
 import { createPurchasing } from "./purchasing.service";
 import { date, nullable, ZodError } from "zod";

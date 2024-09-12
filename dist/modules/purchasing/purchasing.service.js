@@ -46,7 +46,7 @@ function createPurchasing(name, userId) {
             throw new Error(`Product name invalid`);
         if (!product.isActive)
             throw new Error(`Product is not up for sale`);
-        const userinfo = yield (0, user_service_1.getUserById)(userId);
+        const userinfo = yield (0, user_service_1.getAnyUserById)(userId);
         if (!userinfo)
             throw new Error(`Id not obtained from Route`);
         yield db_util_1.default.product.update({

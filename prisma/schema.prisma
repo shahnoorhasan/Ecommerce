@@ -12,6 +12,11 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+enum Roles {
+  SuperAdmin
+  Vendor
+  Customer
+}
 model Category {
   id            Int       @id @default(autoincrement())
   name          String    @unique
@@ -34,13 +39,15 @@ model Product {
 }
 model User {
   id            Int @id @default(autoincrement())
-  username      String 
-  email         String 
+  fullName      String 
+  email         String @unique
+  password      String  
   phoneNumber   String
   country       String 
   city          String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @default(now()) @updatedAt
+  role          Roles    @default(Customer)
   Purchasing    Purchasing[]
 }
 model Purchasing {

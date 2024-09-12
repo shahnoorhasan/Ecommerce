@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../utils/db.util";
-import { getUserById } from "../user/user.service";
+import { getAnyUserById } from "../user/user.service";
 import { createPurchasingSchema } from "./purchasing.schema";
 import { any, object } from "zod";
 
@@ -33,7 +33,7 @@ export async function createPurchasing(name: string, userId: number) {
   });
   if (!product) throw new Error(`Product name invalid`);
   if (!product.isActive) throw new Error(`Product is not up for sale`);
-  const userinfo = await getUserById(userId);
+  const userinfo = await getAnyUserById(userId);
   if (!userinfo) throw new Error(`Id not obtained from Route`);
   await prisma.product.update({
     data: { isActive: false },

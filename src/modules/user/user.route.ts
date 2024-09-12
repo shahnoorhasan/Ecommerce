@@ -1,14 +1,16 @@
 import { Router } from "express";
-import { findUserByIdHandler } from "./user.controller";
+import { findAnyUserByIdHandler } from "./user.controller";
 import { getAllUserByIdHandler } from "./user.controller";
-import { createUserHandler } from "./user.controller";
-import { updateUserHandler } from "./user.controller";
-import { deleteUserHandler } from "./user.controller";
+// import { createAnyUserHandler } from "./user.controller";
+import { updateAnyUserHandler } from "./user.controller";
+import { deleteAnyUserHandler } from "./user.controller";
+// import { AnyUserSignInHandler } from "./user.controller";
 
 const UserRoutes = Router();
-UserRoutes.get("/find-user/:id", findUserByIdHandler);
+UserRoutes.get("/find-user/:id", findAnyUserByIdHandler);
 UserRoutes.get("/get-users", getAllUserByIdHandler);
-UserRoutes.post("/create-user", createUserHandler);
-UserRoutes.patch("/update-user/:id", updateUserHandler);
-UserRoutes.delete("/delete-user/:id", deleteUserHandler);
+// UserRoutes.post("/create-user", createAnyUserHandler);
+// UserRoutes.post("/Sign-In-User", AnyUserSignInHandler);
+UserRoutes.patch("/update-user/:id", updateAnyUserHandler);
+UserRoutes.delete("/delete-user/:id", deleteAnyUserHandler);
 export { UserRoutes as userRoute };

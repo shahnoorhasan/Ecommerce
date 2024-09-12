@@ -9,25 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findUserByIdHandler = findUserByIdHandler;
+exports.findAnyUserByIdHandler = findAnyUserByIdHandler;
 exports.getAllUserByIdHandler = getAllUserByIdHandler;
-exports.createUserHandler = createUserHandler;
-exports.updateUserHandler = updateUserHandler;
-exports.deleteUserHandler = deleteUserHandler;
+exports.updateAnyUserHandler = updateAnyUserHandler;
+exports.deleteAnyUserHandler = deleteAnyUserHandler;
 const user_service_1 = require("./user.service");
 const user_service_2 = require("./user.service");
 const user_service_3 = require("./user.service");
 const user_service_4 = require("./user.service");
-const user_service_5 = require("./user.service");
 const user_schema_1 = require("./user.schema");
 const zod_1 = require("zod");
-function findUserByIdHandler(req, res) {
+function findAnyUserByIdHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = Number(req.params.id);
             if (Number.isNaN(id))
                 throw new Error(`User Id does not exist`);
-            const user = yield (0, user_service_1.getUserById)(id);
+            const user = yield (0, user_service_1.getAnyUserById)(id);
             res.status(200).json({
                 status: 200,
                 message: "Found Success",
@@ -65,37 +63,62 @@ function getAllUserByIdHandler(req, res) {
         }
     });
 }
-function createUserHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const data = user_schema_1.createUserSchema.parse(req.body);
-            const user = yield (0, user_service_3.createUser)(data);
-            res
-                .status(200)
-                .json({ status: 200, message: "Success", data: user, success: true });
-        }
-        catch (error) {
-            if (error instanceof zod_1.ZodError) {
-                const messageJSON = JSON.parse(error.message);
-                const message = `Key name must be written correctly, ${messageJSON[0].path[0]} is ${messageJSON[0].message}`;
-                console.error(message);
-                return res
-                    .status(400)
-                    .json({ status: 400, message: message, data: null, success: false });
-            }
-            console.error(error.message);
-            res.status(400).json({ message: error.message });
-        }
-    });
-}
-function updateUserHandler(req, res) {
+// export async function createAnyUserHandler(req: Request, res: Response) {
+//   try {
+//     const data = createUserSchema.parse(req.body);
+//     const { user, token } = await createAnyUser(data);
+//     res.status(200).json({
+//       status: 200,
+//       message: "Success",
+//       data: { user, token },
+//       success: true,
+//     });
+//   } catch (error: any) {
+//     if (error instanceof ZodError) {
+//       const messageJSON = JSON.parse(error.message);
+//       const message = `Key name must be written correctly, ${messageJSON[0].path[0]} is ${messageJSON[0].message}`;
+//       console.error(message);
+//       return res
+//         .status(400)
+//         .json({ status: 400, message: message, data: null, success: false });
+//     }
+//     console.error(error.message);
+//     res.status(400).json({ message: error.message });
+//   }
+// }
+// export async function AnyUserSignInHandler(req: Request, res: Response) {
+//   try {
+//     const { email, password } = UserSignInSchema.parse(req.body);
+//     if (!email || !password) {
+//       return res.status(400).json({
+//         Status: 400,
+//         message: "Email and Password are required",
+//         data: null,
+//         success: false,
+//       });
+//     }
+//     const result = await AnyUserSignIn(email, password);
+//     res
+//       .status(200)
+//       .json({ status: 200, message: "success", data: result, Success: true });
+//   } catch (error: any) {
+//     console.error(error.message);
+//     res.status(400).json({
+//       status: 400,
+//       message: error.message,
+//       data: null,
+//       success: false,
+//     });
+//   }
+// }
+function updateAnyUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = Number(req.params.id);
             if (Number.isNaN(id))
                 throw new Error(` User Id must be a number`);
             const data = user_schema_1.updateUserSchema.parse(req.body);
-            const user = yield (0, user_service_4.updateUser)(data, id);
+            const user = yield (0, user_service_3.updateAnyUser)(data, id);
             res.status(200).json({
                 status: 200,
                 message: "Successfully Updated",
@@ -118,13 +141,13 @@ function updateUserHandler(req, res) {
         }
     });
 }
-function deleteUserHandler(req, res) {
+function deleteAnyUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const id = Number(req.params.id);
             if (Number.isNaN(id))
                 throw new Error(`User Id does not exist`);
-            yield (0, user_service_5.deleteUser)(id);
+            yield (0, user_service_4.deleteAnyUser)(id);
             res.status(200).json({
                 status: 200,
                 message: "Successfully Deleted",
