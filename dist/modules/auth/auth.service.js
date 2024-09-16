@@ -17,6 +17,7 @@ exports.AnyUserSignIn = AnyUserSignIn;
 const db_util_1 = __importDefault(require("../../utils/db.util"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const env_util_1 = require("../../utils/env.util");
 function AnyUserSignUp(data) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -31,13 +32,14 @@ function AnyUserSignUp(data) {
                     city: data.city,
                 },
             });
-            const token = jsonwebtoken_1.default.sign({ user_id: data.id, user_email: data.email }, "shhhh", {
-                expiresIn: "1h",
-            });
             return user;
         }
         catch (error) {
-            throw new Error(`The error is ${error}`);
+            if (error.code === "P2002") {
+                const target = error.meta.target[0];
+                throw new Error(`Same ${target} already exists, Must be Unique`);
+            }
+            throw error;
         }
     });
 }
@@ -46,14 +48,14 @@ function AnyUserSignIn(email, current_password) {
         try {
             const user = yield db_util_1.default.user.findUnique({ where: { email } });
             if (!user)
-                throw new Error(`This email is not registered `);
+                throw new Error(`Invalid credentials `);
             const passwordMatch = yield bcryptjs_1.default.compare(current_password, user.password);
             if (!passwordMatch)
-                throw new Error(`Invalid Password`);
+                throw new Error(`Invalid credentials`);
             const token = jsonwebtoken_1.default.sign({
                 user_id: user.id,
                 email: user.email,
-            }, "shhhh", { expiresIn: "1h" });
+            }, env_util_1.ENV.JWT_SECRET, { expiresIn: "1h" });
             return { user, token };
         }
         catch (error) {

@@ -7,4 +7,4 @@ const auth_controller_2 = require("./auth.controller");
 const AuthRoutes = (0, express_1.Router)();
 exports.authRoute = AuthRoutes;
 AuthRoutes.post("/User-sign-up", auth_controller_1.AnyUserSignUpHandler);
-AuthRoutes.post("User-sign-in", auth_controller_2.AnyUserSignInHandler);
+AuthRoutes.post("/User-sign-in", auth_controller_2.AnyUserSignInHandler);

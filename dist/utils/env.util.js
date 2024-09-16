@@ -14,4 +14,5 @@ dotenv_1.default.config();
 // })
 exports.ENV = {
     PORT: (_a = process.env.PORT) !== null && _a !== void 0 ? _a : 5001,
+    JWT_SECRET: process.env.JWT_SECRET,
 };

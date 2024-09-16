@@ -1,13 +1,13 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateProductSchema = exports.createProductSchema = void 0;
-const zod_1 = require("zod");
-exports.createProductSchema = zod_1.z.object({
-    name: zod_1.z.string(),
-    price: zod_1.z.number(),
-    categoryId: zod_1.z.number(),
-});
-exports.updateProductSchema = zod_1.z.object({
-    name: zod_1.z.string().optional(),
-    price: zod_1.z.number().optional(),
-});
+// import { z } from "zod";
+// export const createProductSchema = z.object({
+//   name: z.string(),
+//   price: z.number(),
+//   categoryId: z.number(),
+// });
+// export type createProductType = z.infer<typeof createProductSchema>;
+// export const updateProductSchema = z.object({
+//   name: z.string().optional(),
+//   price: z.number().optional(),
+// });
+// export type updateProductType = z.infer<typeof createProductSchema>;

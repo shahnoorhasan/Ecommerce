@@ -30,7 +30,7 @@ function AnyUserSignUpHandler(req, res) {
         catch (error) {
             if (error instanceof zod_1.ZodError) {
                 const messageJSON = JSON.parse(error.message);
-                const message = `Key name must be written correctly, ${messageJSON[0].path[0]} is ${messageJSON[0].message}`;
+                const message = `${messageJSON[0].message}`;
                 console.error(message);
                 return res
                     .status(400)
@@ -54,18 +54,31 @@ function AnyUserSignInHandler(req, res) {
                 });
             }
             const result = yield (0, auth_service_2.AnyUserSignIn)(email, password);
-            res
-                .status(200)
-                .json({ status: 200, message: "success", data: result, Success: true });
+            if ((result === null || result === void 0 ? void 0 : result.user.email) === undefined) {
+                return res.status(400).json({
+                    Status: 400,
+                    message: "Invalid Credentials",
+                    data: null,
+                    success: false,
+                });
+            }
+            if (result.user.email && result.user.password) {
+                return res
+                    .status(200)
+                    .json({ status: 200, message: "success", data: result, Success: true });
+            }
         }
         catch (error) {
+            if (error instanceof zod_1.ZodError) {
+                const messageJSON = JSON.parse(error.message);
+                const message = `${messageJSON[0].message}`;
+                console.error(message);
+                return res
+                    .status(400)
+                    .json({ status: 400, message: message, data: null, success: false });
+            }
             console.error(error.message);
-            res.status(400).json({
-                status: 400,
-                message: error.message,
-                data: null,
-                success: false,
-            });
+            res.status(400).json({ message: error.message });
         }
     });
 }

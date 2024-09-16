@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { createCategorySchema } from "./category.schema";
 import { any, object } from "zod";
-import prisma from "../../utils/db.util";
+import prisma from "../../../utils/db.util";
 
 export async function getCategoryById(id: number) {
   const category = await prisma.category.findUnique({ where: { id } });
@@ -9,8 +9,14 @@ export async function getCategoryById(id: number) {
   return category;
 }
 
+export async function getCategoryByName(name: string) {
+  const category = await prisma.category.findUnique({ where: { name } });
+  if (!category) throw new Error(`Category with ${name} does not exist`);
+  return category;
+}
+
 export async function getAllCategory() {
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({ select: { name: true } });
   return categories;
 }
 

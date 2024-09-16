@@ -21,14 +21,12 @@ export async function findCategoryByIdHandler(req: Request, res: Response) {
       .json({ status: 200, message: "Success", data: category, success: true });
   } catch (error: any) {
     console.error(error.message);
-    res
-      .status(400)
-      .json({
-        status: 200,
-        message: error.message,
-        data: null,
-        success: false,
-      });
+    res.status(400).json({
+      status: 200,
+      message: error.message,
+      data: null,
+      success: false,
+    });
   }
 }
 
@@ -43,14 +41,12 @@ export async function getAllCategoryHandler(req: Request, res: Response) {
       .json({ status: 200, message: "Success", data: category, success: true });
   } catch (error: any) {
     console.error(error.message);
-    res
-      .status(400)
-      .json({
-        status: 400,
-        message: error.message,
-        data: null,
-        success: false,
-      });
+    res.status(400).json({
+      status: 400,
+      message: error.message,
+      data: null,
+      success: false,
+    });
   }
 }
 
@@ -81,14 +77,12 @@ export async function createCategoryHandler(req: Request, res: Response) {
     }
 
     console.error(error.message);
-    return res
-      .status(400)
-      .json({
-        status: 400,
-        message: error.message,
-        data: null,
-        success: false,
-      });
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+      data: null,
+      success: false,
+    });
   }
 }
 
@@ -121,24 +115,20 @@ export async function deleteCategoryByIdHandler(req: Request, res: Response) {
     if (Number.isNaN(id)) throw new Error("Id must be a number");
 
     await deleteCategoryById(id);
-    res
-      .status(200)
-      .json({
-        status: 200,
-        message: "Successfully deleted",
-        data: id,
-        success: true,
-      });
+    res.status(200).json({
+      status: 200,
+      message: "Successfully deleted",
+      data: id,
+      success: true,
+    });
   } catch (error: any) {
     console.error(error.message);
-    res
-      .status(400)
-      .json({
-        status: 200,
-        message: error.message,
-        data: null,
-        success: false,
-      });
+    res.status(400).json({
+      status: 200,
+      message: error.message,
+      data: null,
+      success: false,
+    });
   }
 }
 
@@ -147,14 +137,12 @@ export async function categoryWithProductHandler(req: Request, res: Response) {
     const id = Number(req.params.id);
     if (Number.isNaN(id)) throw new Error("Id must be a number");
     const categoryProduct = await getCategoryByIdWithProducts(id);
-    res
-      .status(200)
-      .json({
-        status: 200,
-        message: "success",
-        data: categoryProduct,
-        success: true,
-      });
+    res.status(200).json({
+      status: 200,
+      message: "success",
+      data: categoryProduct,
+      success: true,
+    });
   } catch (error: any) {
     // {
     //     if (error instanceof ZodError) {
@@ -165,13 +153,11 @@ export async function categoryWithProductHandler(req: Request, res: Response) {
     //     }
 
     console.error(error.message);
-    res
-      .status(400)
-      .json({
-        status: 400,
-        message: error.message,
-        data: null,
-        success: false,
-      });
+    res.status(400).json({
+      status: 400,
+      message: error.message,
+      data: null,
+      success: false,
+    });
   }
 }

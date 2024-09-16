@@ -19,7 +19,11 @@ export async function AnyUserSignUp(data: Prisma.UserUncheckedCreateInput) {
     });
     return user;
   } catch (error: any) {
-    throw new Error(`The error is ${error}`);
+    if (error.code === "P2002") {
+      const target = error.meta.target[0];
+      throw new Error(`Same ${target} already exists, Must be Unique`);
+    }
+    throw error;
   }
 }
 
@@ -29,9 +33,9 @@ export async function AnyUserSignIn(
 ): Promise<{ user: User; token: string } | undefined> {
   try {
     const user = await prisma.user.findUnique({ where: { email } });
-    if (!user) throw new Error(`This email is not registered `);
+    if (!user) throw new Error(`Invalid credentials `);
     const passwordMatch = await bcrypt.compare(current_password, user.password);
-    if (!passwordMatch) throw new Error(`Invalid Password`);
+    if (!passwordMatch) throw new Error(`Invalid credentials`);
 
     const token = jwt.sign(
       {

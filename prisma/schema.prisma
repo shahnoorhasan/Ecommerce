@@ -18,43 +18,70 @@ enum Roles {
   Customer
 }
 model Category {
-  id            Int       @id @default(autoincrement())
-  name          String    @unique
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @default(now()) @updatedAt
-  Product       Product[]
+  id                  Int              @id @default(autoincrement())
+  name                String           @unique
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @default(now()) @updatedAt
+  Product             Product[]
   
 }
 
 model Product {
-  id            Int      @id @default(autoincrement())
-  name          String   @unique
-  price         Int
-  categoryId    Int
-  category      Category @relation(fields: [categoryId], references: [id])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
-  isActive      Boolean  @default(true)
-  Purchasing    Purchasing[]
+  id                  Int               @id @default(autoincrement())
+  name                String            @unique
+  price               Int
+  categoryId          Int
+  category            Category          @relation(fields: [categoryId], references: [id])
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @default(now()) @updatedAt
+  isActive            Boolean           @default(true)
+  quantity            Int
+  description         String
+  Purchasing          Purchasing[]
+  vendorId            Int
+  vendor              User              @relation(fields: [vendorId], references: [id])
 }
 model User {
-  id            Int @id @default(autoincrement())
-  fullName      String 
-  email         String @unique
-  password      String  
-  phoneNumber   String
-  country       String 
-  city          String
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @default(now()) @updatedAt
-  role          Roles    @default(Customer)
-  Purchasing    Purchasing[]
+  id                  Int               @id @default(autoincrement())
+  fullName            String 
+  email               String            @unique
+  password            String  
+  phoneNumber         String
+  country             String 
+  city                String
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @default(now()) @updatedAt
+  role                Roles             @default(Customer)
+  Purchasing          Purchasing[]
+  product             Product[]
+  vendorRequests      VendorRequest[] 
+  vendorCatRequests   VendorCategoryRequests[]
 }
 model Purchasing {
-  id            Int@id @default(autoincrement())
-  userId        Int
-  user          User @relation(fields: [userId], references: [id])
-  productId     Int @unique
-  product       Product @relation(fields: [productId], references: [id])
-  createdAt     DateTime @default(now())
+  id                  Int                @id @default(autoincrement())
+  userId              Int
+  user                User                @relation(fields: [userId], references: [id])
+  productId           Int                 
+  product             Product             @relation(fields: [productId], references: [id])
+  createdAt           DateTime            @default(now())
+  status              String              @default("pending")
 } 
+
+model VendorRequest {
+  id                  Int                 @id @default(autoincrement())
+  userId              Int
+  status              String              @default("pending") // Can be 'pending', 'accepted', or 'rejected'
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  user                User                @relation(fields: [userId], references: [id])
+}
+
+model VendorCategoryRequests {
+  id                  Int                 @id @default(autoincrement())
+  userId              Int
+  name                String
+  status              String              @default("pending")
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  user                User                @relation(fields: [userId], references: [id])
+}

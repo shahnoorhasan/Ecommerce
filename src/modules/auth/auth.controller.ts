@@ -17,7 +17,7 @@ export async function AnyUserSignUpHandler(req: Request, res: Response) {
   } catch (error: any) {
     if (error instanceof ZodError) {
       const messageJSON = JSON.parse(error.message);
-      const message = `Key name must be written correctly, ${messageJSON[0].path[0]} is ${messageJSON[0].message}`;
+      const message = `${messageJSON[0].message}`;
       console.error(message);
       return res
         .status(400)
@@ -41,16 +41,30 @@ export async function AnyUserSignInHandler(req: Request, res: Response) {
       });
     }
     const result = await AnyUserSignIn(email, password);
-    res
-      .status(200)
-      .json({ status: 200, message: "success", data: result, Success: true });
+    if (result?.user.email === undefined) {
+      return res.status(400).json({
+        Status: 400,
+        message: "Invalid Credentials",
+        data: null,
+        success: false,
+      });
+    }
+    if (result.user.email && result.user.password) {
+      return res
+        .status(200)
+        .json({ status: 200, message: "success", data: result, Success: true });
+    }
   } catch (error: any) {
+    if (error instanceof ZodError) {
+      const messageJSON = JSON.parse(error.message);
+      const message = `${messageJSON[0].message}`;
+      console.error(message);
+      return res
+        .status(400)
+        .json({ status: 400, message: message, data: null, success: false });
+    }
+
     console.error(error.message);
-    res.status(400).json({
-      status: 400,
-      message: error.message,
-      data: null,
-      success: false,
-    });
+    res.status(400).json({ message: error.message });
   }
 }
