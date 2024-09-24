@@ -72,17 +72,3 @@ export const updateUserSchema = z.object({
 });
 
 export type updateUserType = z.infer<typeof updateUserSchema>;
-
-export const UserSignInSchema = z.object({
-  email: z.string().endsWith("@gmail.com", {
-    message: "only gmail domains are valid",
-  }),
-  password: z
-    .string()
-    .regex(
-      passwordRegex,
-      "Password must inculde letters, digits and special characters"
-    ),
-});
-
-export type UserSignInType = z.infer<typeof UserSignInSchema>;

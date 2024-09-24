@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.findProductByIdHandler = findProductByIdHandler;
 exports.getAllProductHandler = getAllProductHandler;
 exports.getVendorProductsHandler = getVendorProductsHandler;
 exports.createProductHandler = createProductHandler;
@@ -26,31 +25,6 @@ const product_service_3 = require("./product.service");
 const product_service_4 = require("./product.service");
 const product_schema_1 = require("./product.schema");
 const zod_1 = require("zod");
-function findProductByIdHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const id = Number(req.params.id);
-            if (Number.isNaN(id))
-                throw new Error("Id must be a number");
-            const product = yield (0, product_service_1.getProductById)(id);
-            res.status(200).json({
-                status: 200,
-                message: "Found Successfully",
-                data: product,
-                success: true,
-            });
-        }
-        catch (error) {
-            console.error(error.message);
-            res.status(400).json({
-                status: 400,
-                message: error.message,
-                data: null,
-                success: false,
-            });
-        }
-    });
-}
 function getAllProductHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

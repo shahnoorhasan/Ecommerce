@@ -25,7 +25,7 @@ exports.OutOfStockProducts = OutOfStockProducts;
 exports.countVendorMyProducts = countVendorMyProducts;
 exports.vendorTotalEarnings = vendorTotalEarnings;
 const db_util_1 = __importDefault(require("../../../utils/db.util"));
-const user_service_1 = require("../../user/user.service");
+const user_service_1 = require("../../user/UserManage/user.service");
 const category_service_1 = require("../category/category.service");
 function getProductById(id) {
     return __awaiter(this, void 0, void 0, function* () {

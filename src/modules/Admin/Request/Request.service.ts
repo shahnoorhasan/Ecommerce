@@ -29,7 +29,7 @@ export async function approveVendorRequest(
     if (!request) throw new Error(`No Request found`);
     if (action === "accept") {
       await prisma.user.update({
-        where: { id: request.id },
+        where: { id: request.user.id },
         data: { role: "Vendor" },
       });
     }
@@ -70,21 +70,44 @@ export async function approveCategoryRequests(
       where: { id: requestId },
       include: { user: true },
     });
-    if (!request) throw new Error(`No Request found`);
+
+    if (!request) {
+      throw new Error(`No Request found with ID: ${requestId}`);
+    }
+
     if (action === "accept") {
+      const existingCategory = await prisma.category.findUnique({
+        where: { name: request.name },
+      });
+
+      if (existingCategory) {
+        await prisma.vendorCategoryRequests.update({
+          where: { id: requestId },
+          data: { status: "already exists" },
+        });
+        return {
+          success: false,
+          message: `Category "${request.name}" already exists.`,
+        };
+      }
+
       await prisma.category.create({
         data: {
           name: request.name,
         },
       });
     }
+
     await prisma.vendorCategoryRequests.update({
       where: { id: requestId },
       data: { status: action === "accept" ? "accepted" : "rejected" },
     });
+
     return { success: true, message: `Request has been ${action}ed` };
   } catch (error: any) {
     console.error("Error handling vendor category request:", error.message);
-    throw new Error("Could not process the vendor category request");
+    throw new Error(
+      "Could not process the vendor category request: " + error.message
+    );
   }
 }

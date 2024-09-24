@@ -41,25 +41,21 @@ function approveVendorRequestHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { requestId, action } = req.body;
-            const result = yield (0, Request_service_2.approveVendorRequest)(requestId, action);
-            if ((requestId && action === "accept") || action === "reject") {
-                res.status(200).json({
-                    status: 200,
-                    message: "Action Performed",
-                    data: result.message,
-                    success: true,
-                });
-            }
-            else if ((requestId && action !== "accept") || action !== "reject") {
-                res.status(400).json({
+            if (!["accept", "reject"].includes(action)) {
+                return res.status(400).json({
                     status: 400,
-                    message: "Action Failed",
+                    message: "Invalid action. Must be either 'accept' or 'reject'.",
                     data: null,
                     success: false,
                 });
             }
-            else {
-            }
+            const result = yield (0, Request_service_2.approveVendorRequest)(requestId, action);
+            res.status(200).json({
+                status: 200,
+                message: result.message,
+                data: result.message,
+                success: true,
+            });
         }
         catch (error) {
             if (error instanceof zod_1.ZodError) {
@@ -108,25 +104,21 @@ function approveCategoryRequestHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { requestId, action } = req.body;
-            const result = yield (0, Request_service_1.approveCategoryRequests)(requestId, action);
-            if ((requestId && action === "accept") || action === "reject") {
-                res.status(200).json({
-                    status: 200,
-                    message: "Action Performed",
-                    data: result.message,
-                    success: true,
-                });
-            }
-            else if ((requestId && action !== "accept") || action !== "reject") {
-                res.status(400).json({
+            if (!requestId || !["accept", "reject"].includes(action)) {
+                return res.status(400).json({
                     status: 400,
-                    message: "Action Failed",
+                    message: "Invalid requestId or action",
                     data: null,
                     success: false,
                 });
             }
-            else {
-            }
+            const result = yield (0, Request_service_1.approveCategoryRequests)(requestId, action);
+            res.status(200).json({
+                status: 200,
+                message: "Action Performed",
+                data: result.message,
+                success: true,
+            });
         }
         catch (error) {
             if (error instanceof zod_1.ZodError) {

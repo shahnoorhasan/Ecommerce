@@ -5,9 +5,3 @@ export const createCategorySchema = z.object({
 });
 
 export type CreateCategoryType = z.infer<typeof createCategorySchema>;
-
-export const updateCategorySchema = z.object({
-  name: z.string().regex(nameRegex, "Please enter only words").optional(),
-});
-
-export type UpdateCategoryType = z.infer<typeof updateCategorySchema>;

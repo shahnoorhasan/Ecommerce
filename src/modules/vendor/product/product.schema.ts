@@ -10,7 +10,7 @@ export const createProductSchema = z.object({
   price: z
     .number()
     .min(1, "price must be greater than 0")
-    .max(10, "Please Recheck the price"),
+    .max(999999, "Please recheck the price"),
   quantity: z.number().min(1, "quantity must be greater than 0"),
   description: z
     .string()

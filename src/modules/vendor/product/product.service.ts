@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import prisma from "../../../utils/db.util";
-import { getAnyUserById } from "../../user/user.service";
+import { getAnyUserById } from "../../user/UserManage/user.service";
 import { getCategoryByName } from "../category/category.service";
 
 export async function getProductById(id: number) {
@@ -99,6 +99,7 @@ export async function updateProduct(
     throw error;
   }
 }
+
 export async function deleteProductByName(name: string) {
   const existingProduct = await getProductByName(name);
   if (!existingProduct) throw new Error(`Product not found`);

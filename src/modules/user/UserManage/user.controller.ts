@@ -1,19 +1,10 @@
 import { Request, Response } from "express";
 import { getAnyUserById } from "./user.service";
 import { getAllUserById } from "./user.service";
-
 import { updateAnyUser } from "./user.service";
 import { deleteAnyUser } from "./user.service";
-
-import {
-  createUserSchema,
-  updateUserSchema,
-  UserSignInSchema,
-} from "./user.schema";
-import { date, nullable, ZodError } from "zod";
-import prisma from "../../utils/db.util";
-import { json } from "body-parser";
-import { error } from "console";
+import { updateUserSchema } from "./user.schema";
+import { ZodError } from "zod";
 
 export async function findAnyUserByIdHandler(req: Request, res: Response) {
   try {
@@ -53,57 +44,6 @@ export async function getAllUserByIdHandler(req: Request, res: Response) {
     });
   }
 }
-
-// export async function createAnyUserHandler(req: Request, res: Response) {
-//   try {
-//     const data = createUserSchema.parse(req.body);
-//     const { user, token } = await createAnyUser(data);
-//     res.status(200).json({
-//       status: 200,
-//       message: "Success",
-//       data: { user, token },
-//       success: true,
-//     });
-//   } catch (error: any) {
-//     if (error instanceof ZodError) {
-//       const messageJSON = JSON.parse(error.message);
-//       const message = `Key name must be written correctly, ${messageJSON[0].path[0]} is ${messageJSON[0].message}`;
-//       console.error(message);
-//       return res
-//         .status(400)
-//         .json({ status: 400, message: message, data: null, success: false });
-//     }
-
-//     console.error(error.message);
-//     res.status(400).json({ message: error.message });
-//   }
-// }
-
-// export async function AnyUserSignInHandler(req: Request, res: Response) {
-//   try {
-//     const { email, password } = UserSignInSchema.parse(req.body);
-//     if (!email || !password) {
-//       return res.status(400).json({
-//         Status: 400,
-//         message: "Email and Password are required",
-//         data: null,
-//         success: false,
-//       });
-//     }
-//     const result = await AnyUserSignIn(email, password);
-//     res
-//       .status(200)
-//       .json({ status: 200, message: "success", data: result, Success: true });
-//   } catch (error: any) {
-//     console.error(error.message);
-//     res.status(400).json({
-//       status: 400,
-//       message: error.message,
-//       data: null,
-//       success: false,
-//     });
-//   }
-// }
 
 export async function updateAnyUserHandler(req: Request, res: Response) {
   try {

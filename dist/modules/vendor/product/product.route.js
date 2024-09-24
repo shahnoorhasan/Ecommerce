@@ -11,7 +11,6 @@ const product_controller_6 = require("./product.controller");
 const protection_middleware_1 = require("../../../middlewares/protection.middleware");
 const vendorProductRoutes = (0, express_1.Router)();
 exports.VendorProductRoutes = vendorProductRoutes;
-vendorProductRoutes.get("/find-product/:id", protection_middleware_1.protection, product_controller_1.findProductByIdHandler);
 vendorProductRoutes.get("/get-all-products", protection_middleware_1.protection, product_controller_2.getAllProductHandler);
 vendorProductRoutes.post("/create-product/:id", protection_middleware_1.protection, product_controller_3.createProductHandler);
 vendorProductRoutes.get("/View-Vendor-Products/:vendorId", protection_middleware_1.protection, product_controller_5.getVendorProductsHandler);

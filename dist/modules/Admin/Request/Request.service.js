@@ -47,7 +47,7 @@ function approveVendorRequest(requestId, action) {
                 throw new Error(`No Request found`);
             if (action === "accept") {
                 yield db_util_1.default.user.update({
-                    where: { id: request.id },
+                    where: { id: request.user.id },
                     data: { role: "Vendor" },
                 });
             }
@@ -89,9 +89,23 @@ function approveCategoryRequests(requestId, action) {
                 where: { id: requestId },
                 include: { user: true },
             });
-            if (!request)
-                throw new Error(`No Request found`);
+            if (!request) {
+                throw new Error(`No Request found with ID: ${requestId}`);
+            }
             if (action === "accept") {
+                const existingCategory = yield db_util_1.default.category.findUnique({
+                    where: { name: request.name },
+                });
+                if (existingCategory) {
+                    yield db_util_1.default.vendorCategoryRequests.update({
+                        where: { id: requestId },
+                        data: { status: "already exists" },
+                    });
+                    return {
+                        success: false,
+                        message: `Category "${request.name}" already exists.`,
+                    };
+                }
                 yield db_util_1.default.category.create({
                     data: {
                         name: request.name,
@@ -106,7 +120,7 @@ function approveCategoryRequests(requestId, action) {
         }
         catch (error) {
             console.error("Error handling vendor category request:", error.message);
-            throw new Error("Could not process the vendor category request");
+            throw new Error("Could not process the vendor category request: " + error.message);
         }
     });
 }

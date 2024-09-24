@@ -14,22 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPurchasing = createPurchasing;
 const db_util_1 = __importDefault(require("../../utils/db.util"));
-const user_service_1 = require("../user/user.service");
-// export async function getProductByName(name: string) {
-//   const purchasing = await prisma.product.findUnique({
-//     where: { name },
-//     select: {
-//       id: true,
-//       isActive: true,
-//       name: true,
-//       price: true,
-//       categoryId: true,
-//     },
-//   });
-//   if (!purchasing) throw new Error(`Product name invalid`);
-//   if (!purchasing.isActive) throw new Error(`Product is not up for sale`);
-//   return purchasing;
-// }
+const user_service_1 = require("../user/UserManage/user.service");
 function createPurchasing(name, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const product = yield db_util_1.default.product.findUnique({
@@ -44,13 +29,17 @@ function createPurchasing(name, userId) {
         });
         if (!product)
             throw new Error(`Product name invalid`);
-        if (!product.isActive)
+        if (product.isActive === false)
             throw new Error(`Product is not up for sale`);
         const userinfo = yield (0, user_service_1.getAnyUserById)(userId);
         if (!userinfo)
-            throw new Error(`Id not obtained from Route`);
+            throw new Error(`User does not exist`);
         yield db_util_1.default.product.update({
-            data: { isActive: false },
+            data: {
+                quantity: {
+                    decrement: 1,
+                },
+            },
             where: { name },
         });
         const purchasing = yield db_util_1.default.purchasing.create({

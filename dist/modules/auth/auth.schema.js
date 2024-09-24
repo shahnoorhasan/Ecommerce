@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AnyUserSignInSchema = exports.AnyUserSignUpSchema = void 0;
 const zod_1 = require("zod");
-const full_nameRegex = /^[A-Za-z][a-zA-Z]*(?: [A-Z][a-zA-Z]*)*$/;
+const full_nameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
 const password_Regex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[\W_])[a-zA-Z\d\W_]*$/; // must include letters and digits and special characters
 const phone_numberRegex = /^(?:\+92|03)\d{9}$/;
 const country_Regex = /^[A-Za-z][a-zA-Z]*(?: [A-Z][a-zA-Z]*)*$/;

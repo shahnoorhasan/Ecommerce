@@ -25,27 +25,27 @@ export async function getVendorRequestsHandler(req: Request, res: Response) {
     });
   }
 }
-
 export async function approveVendorRequestHandler(req: Request, res: Response) {
   try {
     const { requestId, action } = req.body;
-    const result = await approveVendorRequest(requestId, action);
-    if ((requestId && action === "accept") || action === "reject") {
-      res.status(200).json({
-        status: 200,
-        message: "Action Performed",
-        data: result.message,
-        success: true,
-      });
-    } else if ((requestId && action !== "accept") || action !== "reject") {
-      res.status(400).json({
+
+    if (!["accept", "reject"].includes(action)) {
+      return res.status(400).json({
         status: 400,
-        message: "Action Failed",
+        message: "Invalid action. Must be either 'accept' or 'reject'.",
         data: null,
         success: false,
       });
-    } else {
     }
+
+    const result = await approveVendorRequest(requestId, action);
+
+    res.status(200).json({
+      status: 200,
+      message: result.message,
+      data: result.message,
+      success: true,
+    });
   } catch (error: any) {
     if (error instanceof ZodError) {
       const messageJSON = JSON.parse(error.message);
@@ -68,7 +68,6 @@ export async function approveVendorRequestHandler(req: Request, res: Response) {
     });
   }
 }
-
 export async function getVendorCategoryRequestsHandler(
   req: Request,
   res: Response
@@ -97,23 +96,24 @@ export async function approveCategoryRequestHandler(
 ) {
   try {
     const { requestId, action } = req.body;
-    const result = await approveCategoryRequests(requestId, action);
-    if ((requestId && action === "accept") || action === "reject") {
-      res.status(200).json({
-        status: 200,
-        message: "Action Performed",
-        data: result.message,
-        success: true,
-      });
-    } else if ((requestId && action !== "accept") || action !== "reject") {
-      res.status(400).json({
+
+    if (!requestId || !["accept", "reject"].includes(action)) {
+      return res.status(400).json({
         status: 400,
-        message: "Action Failed",
+        message: "Invalid requestId or action",
         data: null,
         success: false,
       });
-    } else {
     }
+
+    const result = await approveCategoryRequests(requestId, action);
+
+    res.status(200).json({
+      status: 200,
+      message: "Action Performed",
+      data: result.message,
+      success: true,
+    });
   } catch (error: any) {
     if (error instanceof ZodError) {
       const messageJSON = JSON.parse(error.message);

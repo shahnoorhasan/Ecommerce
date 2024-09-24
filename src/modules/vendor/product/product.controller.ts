@@ -13,30 +13,7 @@ import { getAllProduct } from "./product.service";
 import { createProduct } from "./product.service";
 import { updateProduct } from "./product.service";
 import { createProductSchema, updateProductSchema } from "./product.schema";
-import { date, nullable, ZodError } from "zod";
-
-export async function findProductByIdHandler(req: Request, res: Response) {
-  try {
-    const id = Number(req.params.id);
-    if (Number.isNaN(id)) throw new Error("Id must be a number");
-
-    const product = await getProductById(id);
-    res.status(200).json({
-      status: 200,
-      message: "Found Successfully",
-      data: product,
-      success: true,
-    });
-  } catch (error: any) {
-    console.error(error.message);
-    res.status(400).json({
-      status: 400,
-      message: error.message,
-      data: null,
-      success: false,
-    });
-  }
-}
+import { ZodError } from "zod";
 
 export async function getAllProductHandler(req: Request, res: Response) {
   try {

@@ -10,31 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPurchasingHandler = createPurchasingHandler;
-// import { getProductByName } from "./purchasing.service";
 const purchasing_service_1 = require("./purchasing.service");
 const purchasing_schema_1 = require("./purchasing.schema");
-// export async function getProductByNameHandler(req: Request, res: Response) {
-//   try {
-//     const { productName } = createPurchasingSchema.parse(req.body);
-//     if (!productName || typeof productName !== "string")
-//       throw new Error(`Invalid name or failed in catching name through body`);
-//     const productinfo = await getProductByName(productName);
-//     res.status(200).json({
-//       status: 200,
-//       message: "success",
-//       data: productinfo,
-//       success: true,
-//     });
-//   } catch (error: any) {
-//     console.log(error.message);
-//     res.status(400).json({
-//       status: 400,
-//       message: error.message,
-//       data: null,
-//       success: false,
-//     });
-//   }
-// }
 function createPurchasingHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -47,11 +24,11 @@ function createPurchasingHandler(req, res) {
             if (!productName || typeof productName !== "string")
                 throw new Error(`Invalid name or failed in catching name through body`);
             purchasing_schema_1.createPurchasingSchema.parse({ productName });
-            const purchasinginfo = yield (0, purchasing_service_1.createPurchasing)(productName, userId);
+            const purchasingInfo = yield (0, purchasing_service_1.createPurchasing)(productName, userId);
             res.status(200).json({
                 status: 200,
                 message: "success",
-                data: purchasinginfo,
+                data: purchasingInfo,
                 success: true,
             });
         }

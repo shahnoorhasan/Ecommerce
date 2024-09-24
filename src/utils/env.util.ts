@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-import { string, z } from "zod";
 dotenv.config();
 
 // const env_schema = z.object({

@@ -12,7 +12,7 @@ exports.createProductSchema = zod_1.z.object({
     price: zod_1.z
         .number()
         .min(1, "price must be greater than 0")
-        .max(10, "Please Recheck the price"),
+        .max(999999, "Please recheck the price"),
     quantity: zod_1.z.number().min(1, "quantity must be greater than 0"),
     description: zod_1.z
         .string()
